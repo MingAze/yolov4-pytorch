@@ -6,14 +6,22 @@ import torch.nn as nn
 from nets.CSPdarknet import darknet53
 attention_block = [se_block, cbam_block, eca_block]
 
-
+class SMU(nn.Module):
+    def __init__(self,alpha=0.25):
+        super(SMU, self).__init__()
+        # super(SMU,self).__init__()
+        self.alpha = alpha
+        # initialize mu
+        self.mu = torch.nn.Parameter(torch.tensor(1000000.0)) 
+    def forward(self, x):
+        return ((1+self.alpha)*x + (1-self.alpha)*x*torch.erf(self.mu*(1-self.alpha)*x))/2
 
 def conv2d(filter_in, filter_out, kernel_size, stride=1):
     pad = (kernel_size - 1) // 2 if kernel_size else 0
     return nn.Sequential(OrderedDict([
         ("conv", nn.Conv2d(filter_in, filter_out, kernel_size=kernel_size, stride=stride, padding=pad, bias=False)),
         ("bn", nn.BatchNorm2d(filter_out)),
-        ("relu", nn.LeakyReLU(0.1)),
+        ("relu", nn.SMU(0.1)),
     ]))
 
 #---------------------------------------------------#
@@ -86,7 +94,7 @@ def yolo_head(filters_list, in_filters):
 #   yolo_body
 #---------------------------------------------------#
 class YoloBody(nn.Module):
-    def __init__(self, anchors_mask, num_classes, pretrained = False):
+    def __init__(self, anchors_mask, num_classes, pretrained = False, phi=3):
         super(YoloBody, self).__init__()
         #---------------------------------------------------#   
         #   生成CSPdarknet53的主干模型
@@ -95,6 +103,7 @@ class YoloBody(nn.Module):
         #   26,26,512
         #   13,13,1024
         #---------------------------------------------------#
+        self.phi =phi
         self.backbone   = darknet53(pretrained)
 
         self.conv1      = make_three_conv([512,1024],1024)
@@ -123,14 +132,26 @@ class YoloBody(nn.Module):
 
         # 3*(5+num_classes)=3*(5+20)=3*(4+1+20)=75
         self.yolo_head1         = yolo_head([1024, len(anchors_mask[2]) * (5 + num_classes)],512)
+        
+        if 1 <= self.phi and self.phi <= 3:
+            self.x0_att      = attention_block[self.phi - 1](1024)
+            self.feat1_att      = attention_block[self.phi - 1](256)
+            self.feat2_att      = attention_block[self.phi - 1](512)
+            self.upsample_att   = attention_block[self.phi - 1](128)
 
 
     def forward(self, x):
         #  backbone
         x2, x1, x0 = self.backbone(x)
+        
+        if 1 <= self.phi and self.phi <= 3:
+            x0 = self.x0_att(x0)
+            x1 = self.feat2_att(x1)
+            x2 = self.feat1_att(x2)
 
         # 13,13,1024 -> 13,13,512 -> 13,13,1024 -> 13,13,512 -> 13,13,2048 
         P5 = self.conv1(x0)
+        
         P5 = self.SPP(P5)
         # 13,13,2048 -> 13,13,512 -> 13,13,1024 -> 13,13,512
         P5 = self.conv2(P5)
@@ -140,6 +161,10 @@ class YoloBody(nn.Module):
         # 26,26,512 -> 26,26,256
         P4 = self.conv_for_P4(x1)
         # 26,26,256 + 26,26,256 -> 26,26,512
+        #
+        if 1 <= self.phi and self.phi <= 3:
+            P4 = self.feat1_att(P4)
+        #
         P4 = torch.cat([P4,P5_upsample],axis=1)
         # 26,26,512 -> 26,26,256 -> 26,26,512 -> 26,26,256 -> 26,26,512 -> 26,26,256
         P4 = self.make_five_conv1(P4)
@@ -149,6 +174,10 @@ class YoloBody(nn.Module):
         # 52,52,256 -> 52,52,128
         P3 = self.conv_for_P3(x2)
         # 52,52,128 + 52,52,128 -> 52,52,256
+        #
+        if 1 <= self.phi and self.phi <= 3:
+            P3 = self.upsample_att(P3)
+        #
         P3 = torch.cat([P3,P4_upsample],axis=1)
         # 52,52,256 -> 52,52,128 -> 52,52,256 -> 52,52,128 -> 52,52,256 -> 52,52,128
         P3 = self.make_five_conv2(P3)
@@ -163,6 +192,11 @@ class YoloBody(nn.Module):
         # 26,26,256 -> 13,13,512
         P4_downsample = self.down_sample2(P4)
         # 13,13,512 + 13,13,512 -> 13,13,1024
+        #
+        if 1 <= self.phi and self.phi <= 3:
+            P4_downsample = self.feat2_att(P4_downsample)
+        #
+        
         P5 = torch.cat([P4_downsample,P5],axis=1)
         # 13,13,1024 -> 13,13,512 -> 13,13,1024 -> 13,13,512 -> 13,13,1024 -> 13,13,512
         P5 = self.make_five_conv4(P5)
@@ -184,4 +218,5 @@ class YoloBody(nn.Module):
         out0 = self.yolo_head1(P5)
 
         return out0, out1, out2
+
 
