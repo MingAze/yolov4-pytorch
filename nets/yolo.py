@@ -6,6 +6,8 @@ import torch.nn as nn
 from nets.CSPdarknet import darknet53
 attention_block = [se_block, cbam_block, eca_block]
 
+
+
 def conv2d(filter_in, filter_out, kernel_size, stride=1):
     pad = (kernel_size - 1) // 2 if kernel_size else 0
     return nn.Sequential(OrderedDict([
