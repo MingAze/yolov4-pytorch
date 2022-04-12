@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 import torch
 import torch.nn as nn
-
+from nets.attention import cbam_block, eca_block, se_block
 from nets.CSPdarknet import darknet53
 attention_block = [se_block, cbam_block, eca_block]
 
