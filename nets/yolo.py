@@ -21,7 +21,7 @@ def conv2d(filter_in, filter_out, kernel_size, stride=1):
     return nn.Sequential(OrderedDict([
         ("conv", nn.Conv2d(filter_in, filter_out, kernel_size=kernel_size, stride=stride, padding=pad, bias=False)),
         ("bn", nn.BatchNorm2d(filter_out)),
-        ("relu", nn.SMU(0.1)),
+        ("relu", SMU(0.1)),
     ]))
 
 #---------------------------------------------------#
