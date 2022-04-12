@@ -88,8 +88,10 @@ if __name__ == "__main__":
     #   Cosine_lr 余弦退火学习率 True or False
     #   label_smoothing 标签平滑 0.01以下一般 如0.01、0.005
     #------------------------------------------------------#
-    mosaic              = False
-    Cosine_lr           = False
+#     mosaic              = False
+    mosaic              = True
+#     Cosine_lr           = False
+    Cosine_lr           = True
     label_smoothing     = 0
 
     #----------------------------------------------------#
@@ -111,8 +113,8 @@ if __name__ == "__main__":
     #   此时模型的主干不被冻结了，特征提取网络会发生改变
     #   占用的显存较大，网络所有的参数都会发生改变
     #----------------------------------------------------#
-    UnFreeze_Epoch      = 100
-    Unfreeze_batch_size = 4
+    UnFreeze_Epoch      = 150
+    Unfreeze_batch_size = 8
     Unfreeze_lr         = 1e-4
     #------------------------------------------------------#
     #   是否进行冻结训练，默认先冻结主干训练后解冻训练。
