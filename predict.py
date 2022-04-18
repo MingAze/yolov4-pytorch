@@ -68,7 +68,7 @@ if __name__ == "__main__":
     elif mode == "video":
         capture = cv2.VideoCapture(video_path)
         if video_save_path!="":
-            fourcc  = cv2.VideoWriter_fourcc(*'XVID')
+            fourcc  = cv2.VideoWriter_fourcc(*'mp4v')
             size    = (int(capture.get(cv2.CAP_PROP_FRAME_WIDTH)), int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT)))
             out     = cv2.VideoWriter(video_save_path, fourcc, video_fps, size)
 
