@@ -96,7 +96,7 @@ if __name__ == "__main__":
             print("fps= %.2f"%(fps))
             frame = cv2.putText(frame, "fps= %.2f"%(fps), (0, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
             
-            cv2.imshow("video",frame)
+#             cv2.imshow("video",frame)
             c= cv2.waitKey(1) & 0xff 
             if video_save_path!="":
                 out.write(frame)
