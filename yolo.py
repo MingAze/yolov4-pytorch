@@ -26,7 +26,7 @@ class YOLO(object):
         #   如果出现shape不匹配，同时要注意训练时的model_path和classes_path参数的修改
         #--------------------------------------------------------------------------#
         "model_path"        : '/content/gdrive/MyDrive/yolov4-face-mask/model_date/ep148-loss1.121-val_loss1.251.pth',
-        "classes_path"      : 'model_data/coco_classes.txt',
+        "classes_path"      : 'model_data/face_mask.txt',
         #---------------------------------------------------------------------#
         #   anchors_path代表先验框对应的txt文件，一般不修改。
         #   anchors_mask用于帮助代码找到对应的先验框，一般不修改。
@@ -57,7 +57,7 @@ class YOLO(object):
         #   phi = 2为CBAM
         #   phi = 3为ECA
         #-------------------------------#
-        "phi"               : 0,  
+        "phi"               : 3,  
         #-------------------------------#
         #   是否使用Cuda
         #   没有GPU可以设置成False
