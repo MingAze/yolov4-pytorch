@@ -30,7 +30,7 @@ if __name__ == "__main__":
     #   保存视频时需要ctrl+c退出或者运行到最后一帧才会完成完整的保存步骤。
     #----------------------------------------------------------------------------------------------------------#
     video_path      = "/content/gdrive/MyDrive/yolov4-face-mask/mask1.mp4"
-    video_save_path = "/content/gdrive/MyDrive/yolov4-face-mask/logs"
+    video_save_path = "/content/gdrive/MyDrive/yolov4-face-mask/"
     video_fps       = 28.2
     #-------------------------------------------------------------------------#
     #   test_interval用于指定测量fps的时候，图片检测的次数
