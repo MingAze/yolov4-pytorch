@@ -19,7 +19,7 @@ if __name__ == "__main__":
     #   'fps'表示测试fps，使用的图片是img里面的street.jpg，详情查看下方注释。
     #   'dir_predict'表示遍历文件夹进行检测并保存。默认遍历img文件夹，保存img_out文件夹，详情查看下方注释。
     #----------------------------------------------------------------------------------------------------------#
-    mode = "predict"
+    mode = "video"
     #----------------------------------------------------------------------------------------------------------#
     #   video_path用于指定视频的路径，当video_path=0时表示检测摄像头
     #   想要检测视频，则设置如video_path = "xxx.mp4"即可，代表读取出根目录下的xxx.mp4文件。
@@ -29,9 +29,9 @@ if __name__ == "__main__":
     #   video_path、video_save_path和video_fps仅在mode='video'时有效
     #   保存视频时需要ctrl+c退出或者运行到最后一帧才会完成完整的保存步骤。
     #----------------------------------------------------------------------------------------------------------#
-    video_path      = 0
-    video_save_path = ""
-    video_fps       = 25.0
+    video_path      = "/content/gdrive/MyDrive/yolov4-face-mask/mask1.mp4"
+    video_save_path = "/content/gdrive/MyDrive/yolov4-face-mask/logs"
+    video_fps       = 28.2
     #-------------------------------------------------------------------------#
     #   test_interval用于指定测量fps的时候，图片检测的次数
     #   理论上test_interval越大，fps越准确。
