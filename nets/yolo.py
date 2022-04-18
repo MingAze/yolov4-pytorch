@@ -6,22 +6,23 @@ from nets.attention import cbam_block, eca_block, se_block
 from nets.CSPdarknet import darknet53
 attention_block = [se_block, cbam_block, eca_block]
 
-class SMU(nn.Module):
-    def __init__(self,alpha=0.25):
-        super(SMU, self).__init__()
-        # super(SMU,self).__init__()
-        self.alpha = alpha
-        # initialize mu
-        self.mu = torch.nn.Parameter(torch.tensor(1000000.0)) 
-    def forward(self, x):
-        return ((1+self.alpha)*x + (1-self.alpha)*x*torch.erf(self.mu*(1-self.alpha)*x))/2
+# class SMU(nn.Module):
+#     def __init__(self,alpha=0.25):
+#         super(SMU, self).__init__()
+#         # super(SMU,self).__init__()
+#         self.alpha = alpha
+#         # initialize mu
+#         self.mu = torch.nn.Parameter(torch.tensor(1000000.0)) 
+#     def forward(self, x):
+#         return ((1+self.alpha)*x + (1-self.alpha)*x*torch.erf(self.mu*(1-self.alpha)*x))/2
 
 def conv2d(filter_in, filter_out, kernel_size, stride=1):
     pad = (kernel_size - 1) // 2 if kernel_size else 0
     return nn.Sequential(OrderedDict([
         ("conv", nn.Conv2d(filter_in, filter_out, kernel_size=kernel_size, stride=stride, padding=pad, bias=False)),
         ("bn", nn.BatchNorm2d(filter_out)),
-        ("relu", SMU(0.1)),
+        ("relu", nn.LeakyReLU(0.1)),
+#         ("relu", SMU(0.1)),
     ]))
 
 #---------------------------------------------------#
