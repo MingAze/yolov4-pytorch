@@ -70,7 +70,7 @@ if __name__ == "__main__":
     #   如果一定要训练网络的主干部分，可以了解imagenet数据集，首先训练分类模型，分类模型的 主干部分 和该模型通用，基于此进行训练。
     #----------------------------------------------------------------------------------------------------------------------------#
 #     model_path      = '/content/gdrive/MyDrive/yolov4-face-mask/model_date/yolo4_voc_weights.pth'
-    model_path      = '/content/gdrive/MyDrive/yolov4-face-mask/model_date/ep014-loss0.056-val_loss0.049.pth'
+    model_path      = '/content/gdrive/MyDrive/yolov4-face-mask/logs/ep014-loss0.056-val_loss0.049.pth'
    
     #------------------------------------------------------#
     #   输入的shape大小，一定要是32的倍数
