@@ -170,5 +170,5 @@ class CSPDarkNet(nn.Module):
 def darknet53(pretrained):
     model = CSPDarkNet([1, 2, 8, 8, 4])
     if pretrained:
-        model.load_state_dict(torch.load("model_data/CSPdarknet53_backbone_weights.pth"))
+        model.load_state_dict(torch.load("/content/gdrive/MyDrive/yolov4-face-mask/model_data/CSPdarknet53_backbone_weights.pth"))
     return model
