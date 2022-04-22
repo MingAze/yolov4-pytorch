@@ -69,8 +69,8 @@ if __name__ == "__main__":
     #   网络一般不从0开始训练，至少会使用主干部分的权值，有些论文提到可以不用预训练，主要原因是他们 数据集较大 且 调参能力优秀。
     #   如果一定要训练网络的主干部分，可以了解imagenet数据集，首先训练分类模型，分类模型的 主干部分 和该模型通用，基于此进行训练。
     #----------------------------------------------------------------------------------------------------------------------------#
-    model_path      = '/content/gdrive/MyDrive/yolov4-face-mask/model_date/yolo4_voc_weights.pth'
-#     model_path      = '/content/gdrive/MyDrive/yolov4-face-mask/logs/ep014-loss0.056-val_loss0.049.pth'
+#     model_path      = '/content/gdrive/MyDrive/yolov4-face-mask/model_date/yolo4_voc_weights.pth'
+    model_path      = '/content/gdrive/MyDrive/yolov4-face-mask/logs/ep025-loss1.745-val_loss1.467.pth'
    
     #------------------------------------------------------#
     #   输入的shape大小，一定要是32的倍数
@@ -108,16 +108,18 @@ if __name__ == "__main__":
     #----------------------------------------------------#
     Init_Epoch          = 0
     Freeze_Epoch        = 50
-    Freeze_batch_size   = 12
-    Freeze_lr           = 1e-3
+    Freeze_batch_size   = 8
+#     Freeze_lr           = 1e-3
+    Freeze_lr           = 1e-5
     #----------------------------------------------------#
     #   解冻阶段训练参数
     #   此时模型的主干不被冻结了，特征提取网络会发生改变
     #   占用的显存较大，网络所有的参数都会发生改变
     #----------------------------------------------------#
     UnFreeze_Epoch      = 150
-    Unfreeze_batch_size = 12
-    Unfreeze_lr         = 1e-4
+    Unfreeze_batch_size = 8
+#    Unfreeze_lr           = 1e-4
+    Unfreeze_lr           = 1e-6
     #------------------------------------------------------#
     #   是否进行冻结训练，默认先冻结主干训练后解冻训练。
     #------------------------------------------------------#
